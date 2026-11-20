@@ -1,7 +1,7 @@
 // Cada vez que subas cambios a GitHub, subí también este número (v60 → v61, etc.).
 // Si no cambia, el botón rojo de "Nueva actualización" no aparece.
 // (Ya no hace falta cambiar los "?v=" de los <script> y los <link>.)
-const CACHE = "radio-ar-v91";
+const CACHE = "radio-ar-v95";
 const ASSETS = [
   "./",
   "./index.html",
@@ -15,7 +15,7 @@ const ASSETS = [
   "./pc.js",
   "./pc-three.js",
   "./vendor/three.min.js",
-  "./radio-magica-pc.png",
+  "./radio-magica-pc.webp",
   "./magic-theme.css",
   "./magic-night.svg",
   "./manifest.json",

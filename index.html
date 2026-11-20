@@ -27,8 +27,11 @@
     })();
   </script>
   <title>Radio Argentina</title>
-  <link rel="stylesheet" href="styles.css?v=28" />
-  <link rel="stylesheet" href="magic-theme.css?v=1" />
+  <link rel="preload" href="logo.webp" as="image" type="image/webp" fetchpriority="high" />
+  <link rel="preload" href="fonts/open-sans-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="fonts/exo-2-latin-700-italic.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="stylesheet" href="styles.css?v=29" />
+  <link rel="stylesheet" href="magic-theme.css?v=2" />
 </head>
 <body>
   <div class="app" id="app">
@@ -37,7 +40,7 @@
     <header class="radio-header">
       <div class="brand">
         <div class="brand-logo-wrap">
-          <img class="brand-logo" src="logo.webp" width="48" height="48" alt="Logo Ariel" decoding="async" />
+          <img class="brand-logo" src="logo.webp" width="48" height="48" alt="Logo Ariel" decoding="async" fetchpriority="high" />
         </div>
         <span class="brand-text">Radio Argentina</span>
       </div>
@@ -248,10 +251,10 @@
   </div>
 
   <audio id="player" preload="none" crossorigin="anonymous"></audio>
-  <script src="stations.js?v=1"></script>
-  <script src="logos.js?v=1"></script>
-  <script src="app.js?v=28"></script>
-  <script src="update.js?v=1"></script>
+  <script src="stations.js?v=1" defer></script>
+  <script src="logos.js?v=1" defer></script>
+  <script src="app.js?v=29" defer></script>
+  <script src="update.js?v=1" defer></script>
 
   <dialog class="sheet" id="shortcutDialog" aria-labelledby="shortcutTitle">
     <div class="sheet-head">

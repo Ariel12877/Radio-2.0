@@ -25,9 +25,16 @@
       radial-gradient(1px 1px at 88% 31%, #b6e9ff 50%, transparent 60%),
       radial-gradient(2px 2px at 63% 74%, #ffe9ad 50%, transparent 60%),
       radial-gradient(1px 1px at 8% 83%, #b6e9ff 50%, transparent 60%);
-    animation: magicDrift 12s ease-in-out infinite alternate;
+    /* Capa compositada: solo opacity + transform */
+    transform: translateZ(0);
+    contain: strict;
+    will-change: transform, opacity;
+    animation: magicDrift 14s ease-in-out infinite alternate;
   }
-  @keyframes magicDrift { from { opacity: .28; transform: translateY(0); } to { opacity: .65; transform: translateY(-7px); } }
+  @keyframes magicDrift {
+    from { opacity: .28; transform: translate3d(0, 0, 0); }
+    to   { opacity: .65; transform: translate3d(0, -7px, 0); }
+  }
   .app {
     position: relative; z-index: 1;
     background:
@@ -104,7 +111,10 @@
       radial-gradient(2px 2px at 68% 64%, #ffe7a0 65%, transparent),
       radial-gradient(1px 1px at 13% 77%, #a9dcff 65%, transparent),
       radial-gradient(2px 2px at 43% 91%, #ffe7a0 65%, transparent);
-    animation: magicDrift 10s ease-in-out infinite alternate;
+    transform: translateZ(0);
+    contain: strict;
+    will-change: transform, opacity;
+    animation: magicDrift 14s ease-in-out infinite alternate;
   }
   .app {
     max-width: 480px !important;
@@ -186,4 +196,14 @@
 }
 @media (max-width: 899px) {
   html, body { background-image: url("magic-night.svg"), linear-gradient(180deg,#020614,#07152c,#02040c) !important; background-size: cover !important; background-position: center !important; background-attachment: fixed !important; }
+}
+
+/* Ahorro de batería / accesibilidad: sin estrellas en movimiento */
+@media (prefers-reduced-motion: reduce) {
+  body::before {
+    animation: none !important;
+    will-change: auto !important;
+    opacity: .45 !important;
+    transform: none !important;
+  }
 }

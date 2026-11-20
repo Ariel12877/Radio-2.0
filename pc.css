@@ -79,13 +79,16 @@ button { cursor: pointer; border: 0; background: none; -webkit-user-select: none
   position: absolute; left: 0; top: 0;
   width: 1536px; height: 1024px;
   transform-origin: 0 0;
-  background: url("pc-skin.webp") 0 0 / 1536px 1024px no-repeat;
-  visibility: hidden;
+  background: url("radio-magica-pc.webp") 0 0 / 1536px 1024px no-repeat;
+  background-color: #04070f;
+  /* Visible de inmediato → mejor LCP (antes visibility:hidden hasta JS) */
   -webkit-user-select: none; user-select: none;
   z-index: 1;
-  filter: drop-shadow(0 18px 28px rgba(0, 0, 0, 0.55)) drop-shadow(0 4px 8px rgba(0, 0, 0, 0.35));
+  /* box-shadow en vez de filter:drop-shadow (mucho más barato en paint) */
+  box-shadow: 0 18px 28px rgba(0, 0, 0, 0.55), 0 4px 8px rgba(0, 0, 0, 0.35);
+  contain: layout style;
 }
-.stage.ready { visibility: visible; }
+.stage.ready { /* marca de hidratación JS; ya no oculta el LCP */ }
 .stage > * { position: absolute; }
 
 /* ===== Escala numérica del dial y luz cálida tenue ===== */
@@ -97,8 +100,12 @@ button { cursor: pointer; border: 0; background: none; -webkit-user-select: none
     linear-gradient(180deg, rgba(255,197,93,.12), rgba(255,181,76,.035) 38%, rgba(255,196,100,.09));
   mix-blend-mode: screen;
   opacity: .78;
-  filter: blur(8px);
-  animation: dialWarmth 5.5s ease-in-out infinite alternate;
+  filter: blur(6px);
+  /* Capa GPU: solo anima opacity (barato). Blur fijo, no animado. */
+  transform: translateZ(0);
+  contain: strict;
+  will-change: opacity;
+  animation: dialWarmth 6.5s ease-in-out infinite alternate;
 }
 @keyframes dialWarmth { from { opacity: .58; } to { opacity: .82; } }
 .dial-numbers {
@@ -222,7 +229,10 @@ button { cursor: pointer; border: 0; background: none; -webkit-user-select: none
 }
 .lcd-name span { display: inline-block; }
 .lcd-name.marquee { justify-content: flex-start; }
-.lcd-name.marquee span { animation: marquee 7s ease-in-out infinite alternate; }
+.lcd-name.marquee span {
+  will-change: transform;
+  animation: marquee 7s ease-in-out infinite alternate;
+}
 @keyframes marquee {
   0%, 14% { transform: translateX(0); }
   86%, 100% { transform: translateX(var(--shift, 0px)); }
@@ -332,6 +342,8 @@ button { cursor: pointer; border: 0; background: none; -webkit-user-select: none
   border-radius: 7px;
   background: linear-gradient(180deg, rgba(36,21,10,.62) 0%, rgba(18,9,3,.72) 100%);
   cursor: pointer;
+  content-visibility: auto;
+  contain-intrinsic-size: auto 52px;
 }
 .row[hidden] { display: none; }
 .row > * { position: absolute; }
@@ -952,7 +964,7 @@ button { cursor: pointer; border: 0; background: none; -webkit-user-select: none
 .stage {
   width: 1536px !important;
   height: 1024px !important;
-  background: url("radio-magica-pc.png") center center / 1536px 1024px no-repeat !important;
+  background: url("radio-magica-pc.webp") center center / 1536px 1024px no-repeat !important;
   filter: none !important;
 }
 /* La imagen ya contiene dial, decoracion y botones. Desactivar decoraciones duplicadas. */
@@ -1108,7 +1120,7 @@ button { cursor: pointer; border: 0; background: none; -webkit-user-select: none
 #vol .vslot, #vol .vfill, #vol .vthumb { pointer-events:none !important; }
 
 /* ===== RETRO AMBAR — PC: panel limpio y zonas sobre la radio centrada ===== */
-.stage { background:url("radio-magica-pc.png") center center / 1536px 1024px no-repeat !important; background-color:#04070f !important; }
+.stage { background:url("radio-magica-pc.webp") center center / 1536px 1024px no-repeat !important; background-color:#04070f !important; }
 .stage .lcd {
  left:545px !important; top:378px !important; width:445px !important; height:223px !important;
  border-radius:24px !important; overflow:hidden !important; z-index:7 !important;
@@ -1148,7 +1160,7 @@ button { cursor: pointer; border: 0; background: none; -webkit-user-select: none
 .sheet { z-index:40 !important; }
 
 /* ===== RETRO AMBAR — PC: panel limpio y zonas sobre la radio centrada ===== */
-.stage { background:url("radio-magica-pc.png") center center / 1536px 1024px no-repeat !important; background-color:#04070f !important; }
+.stage { background:url("radio-magica-pc.webp") center center / 1536px 1024px no-repeat !important; background-color:#04070f !important; }
 .stage .lcd {
  left:545px !important; top:378px !important; width:445px !important; height:223px !important;
  border-radius:24px !important; overflow:hidden !important; z-index:7 !important;
@@ -1189,7 +1201,7 @@ button { cursor: pointer; border: 0; background: none; -webkit-user-select: none
 
 /* === Consolidación final Retro Ámbar (sin !important bloqueantes ni comentarios abiertos) === */
 .stage {
-  background: url("radio-magica-pc.png") center center / 1536px 1024px no-repeat !important;
+  background: url("radio-magica-pc.webp") center center / 1536px 1024px no-repeat !important;
   background-color: #04070f !important;
 }
 

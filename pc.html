@@ -14,7 +14,7 @@
   <link rel="manifest" href="manifest.json" />
   <link rel="apple-touch-icon" href="icon-192.png" />
   <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png" />
-  <link rel="preload" href="radio-magica-pc.png" as="image" type="image/png" />
+  <link rel="preload" href="radio-magica-pc.webp" as="image" type="image/webp" fetchpriority="high" />
   <link rel="preload" href="fonts/roboto-latin-500-normal.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="preload" href="fonts/roboto-condensed-latin-500-normal.woff2" as="font" type="font/woff2" crossorigin />
   <script>
@@ -26,8 +26,25 @@
       if (mq.addEventListener) mq.addEventListener("change", go);
     })();
   </script>
+  <script>
+    /* Escala temprana del escenario (antes del CSS/JS completo) → menos CLS y LCP más rápido */
+    (function () {
+      function fitEarly() {
+        var s = document.getElementById("stage");
+        if (!s) return;
+        var vw = window.innerWidth, vh = window.innerHeight;
+        var scale = Math.min(vw / 1536, vh / 1024);
+        var x = (vw - 1536 * scale) / 2, y = (vh - 1024 * scale) / 2;
+        s.style.transform = "translate(" + x + "px," + y + "px) scale(" + scale + ")";
+      }
+      if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", fitEarly);
+      } else { fitEarly(); }
+      window.addEventListener("resize", fitEarly);
+    })();
+  </script>
   <title>Radio Argentina</title>
-  <link rel="stylesheet" href="pc.css?v=42" />
+  <link rel="stylesheet" href="pc.css?v=43" />
 </head>
 <body>
   <div class="backdrop" aria-hidden="true"></div>
@@ -228,11 +245,31 @@
   </dialog>
 
   <audio id="player" preload="none"></audio>
-  <script src="stations.js?v=1"></script>
-  <script src="logos.js?v=1"></script>
-  <script src="pc.js?v=31"></script>
-  <script src="update.js?v=2"></script>
-  <script src="vendor/three.min.js"></script>
-  <script src="pc-three.js?v=2"></script>
+  <script src="stations.js?v=1" defer></script>
+  <script src="logos.js?v=1" defer></script>
+  <script src="pc.js?v=32" defer></script>
+  <script src="update.js?v=2" defer></script>
+  <!-- Three.js + efectos: carga diferida (no bloquea INP ni LCP) -->
+  <script>
+    (function () {
+      function loadMagic() {
+        if (window.__magicLoaded) return;
+        window.__magicLoaded = true;
+        var a = document.createElement("script");
+        a.src = "vendor/three.min.js";
+        a.onload = function () {
+          var b = document.createElement("script");
+          b.src = "pc-three.js?v=4";
+          document.body.appendChild(b);
+        };
+        document.body.appendChild(a);
+      }
+      if ("requestIdleCallback" in window) {
+        requestIdleCallback(loadMagic, { timeout: 2500 });
+      } else {
+        window.addEventListener("load", function () { setTimeout(loadMagic, 400); });
+      }
+    })();
+  </script>
 </body>
 </html>
